@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+#writeform{
+	height: 500px;
+	height : auto;
+	width: 100%;
+	background-color: white;
+	padding: 10px;
+}
+#writeform input{
+	height: 30px;
+	width: 100%;
+	margin-bottom: 5px;
+}
+#writeform textarea {
+	height: 400px;
+	width: 100%;
+}
+
