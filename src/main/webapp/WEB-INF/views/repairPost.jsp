@@ -5,12 +5,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>댓글</title>
+<title>글수정</title>
 <link href="./css/menu.css" rel="stylesheet">
 <link href="./css/write.css" rel="stylesheet">
 <!-- include libraries(jQuery, bootstrap) -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <!-- include summernote css/js -->
@@ -41,12 +42,12 @@ function check(){
 		<div id="main">
 		<h1>글쓰기</h1>
 		<div id="writeform">
-			<form action="./write" method="post"  onsubmit="return check();" enctype="multipart/form-data">
-				<input type="text" name="title" ><br>
-				<textarea name="content" id="summernote"  ></textarea><br>
-				<input type="hidden" name="b_cate" value="${param.b_cate }">
-				<input type="file" name="files" accept=".png, .jpg, .gif, .jpeg," multiple="multiple">
-				<button type="submit" style="margin-left: 92%;">글쓰기</button>
+			<form action="./repairPost" method="post"  onsubmit="return check()" >
+				<input type="text" name="title" required="required" value="${dto.b_title }">
+				<textarea name="content" id="summernote"  required="required">${dto.b_content }</textarea>
+				<input type="hidden" name="b_no" value="${dto.b_no }">
+				
+				<button type="submit" style="margin-left: 92%;">글수정</button>
 			</form>
 		</div>
 		<!-- <button type="button" onclick="show()">다이얼로그</button> -->

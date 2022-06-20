@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <div class="wrap">
-	<img alt="logo" src="./img/rainbow.png">
+	<a href="./"><img alt="logo" src="./img/rainbow.png"></a>
 	<c:choose>
 		<c:when test="${sessionScope.id eq null}">
 		<div id="login2" style="width: 100%">로그인하기</div>
@@ -53,9 +53,10 @@
 	<div class="contents">
 		<div class="inner">
 			<div class="description">
-				<p onclick="location.href='./board'">게시판</p>
-				<p onclick="location.href='./board'">게시판</p>
-				<p onclick="location.href='./board'">게시판</p>
+				<p onclick="location.href='./board?b_cate=1'">게시판</p>
+				<p onclick="location.href='./board?b_cate=2'">게시판</p>
+				<p onclick="location.href='./board?b_cate=3'">게시판</p>
+				<p onclick="location.href='./board?b_cate=4'">게시판</p>
 			</div>
 		</div>
 	</div>

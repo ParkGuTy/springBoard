@@ -9,6 +9,11 @@
 <link href="./css/menu.css" rel="stylesheet">
 </head>
 <body>
+	<c:if test="${error ne null}">
+		<script type="text/javascript">
+			alert("${error}");
+		</script>
+	</c:if>
 	<div id="menubar">
 		<c:import url="menu.jsp" />
 		<c:if test="${param.error ne null}">

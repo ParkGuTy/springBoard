@@ -7,18 +7,18 @@
 <meta charset="UTF-8">
 <title>index</title>
 <link href="./css/menu.css" rel="stylesheet">
+<script type="text/javascript">
+	
+</script>
+
 </head>
 <body>
-
 	<div id="container">
 		<div id="menubar">
-			
-			
 			<c:import url="menu.jsp"/>
 		</div>
 		<div id="main">
 		</div>
 	</div>
-
 </body>
 </html>
