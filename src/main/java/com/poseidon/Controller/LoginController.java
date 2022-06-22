@@ -61,8 +61,8 @@ public class LoginController {
 		
 	         dto.setU_id(request.getParameter("id"));
 	         dto.setU_pw(request.getParameter("pw1"));
-	         dto.setU_name(request.getParameter("name"));
-	         dto.setU_email(request.getParameter("email"));
+	         dto.setU_name(request.getParameter("u_name"));
+	         dto.setU_email(request.getParameter("u_email"));
 	         
 	         int result = loginService.join(dto);
 		

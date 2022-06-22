@@ -23,8 +23,11 @@ public class BoardDAO {
 
 	public BoardDTO detail(BoardDTO repairPost) {
 		//countUp 조회수 올리기
-		sqlSession.update("board.countUp", repairPost);
 		return sqlSession.selectOne("board.detail",repairPost);
+	}
+	
+	public void countUp(BoardDTO dto) {
+		sqlSession.update("board.countUp", dto);
 	}
 
 	public int write(BoardDTO write) {

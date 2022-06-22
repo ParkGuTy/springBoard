@@ -73,14 +73,14 @@ td input {
 						</tr>
 						<tr>
 							<td class="t">이름</td>
-							<td><input type="text" name="name" id="name"></td>
+							<td><input type="text" name="u_name" id="u_name"></td>
 						</tr>
 						<tr>
 							<td class="t">email</td>
 							<td><input type="text" name="u_email" id="u_email"></td>
 						</tr>
 					</table>
-					<button id="joinBtn" disabled="disabled">가입하기</button>
+					<button id="joinBtn" disabled="disabled" type="submit">가입하기</button>
 				</form>
 			</div>
 		</div>
@@ -89,8 +89,8 @@ td input {
 		$(function() {
 			
 			 $("#id").change(function(){
-				if ( $("#id").val().length < 4) {
-					alert("ID는 4글자 이상으로 만들어주세요.");
+				if ( $("#id").val().length < 1) {
+					alert("ID는 1글자 이상으로 만들어주세요.");
 				}else{
 					$.ajax({
 						url : "./checkID",
@@ -125,21 +125,21 @@ td input {
 					$("#id").focus();
 					return false;
 				}
-				if(id.length < 4){
-					alert("4글자 이상으로 만들어주세요.");
+				if(id.length < 1){
+					alert("1글자 이상으로 만들어주세요.");
 					$("#id").focus();
 					return false;
 				}
 				var pw1 = $("#pw1").val();
-				if(pw1 == "" || pw1.length < 4){
-					alert("암호는 4글자 이상으로 만들어주세요.");
+				if(pw1 == "" || pw1.length < 1){
+					alert("암호는 1글자 이상으로 만들어주세요.");
 					$("#pw1").focus();
 					return false;
 				}
 				
 				var pw2 = $("#pw2").val();
-				if(pw2 == "" || pw2.length < 4){
-					alert("암호는 4글자 이상으로 만들어주세요.");
+				if(pw2 == "" || pw2.length < 1){
+					alert("암호는 1글자 이상으로 만들어주세요.");
 					$("#pw2").focus();
 					return false;	
 				}
@@ -151,13 +151,13 @@ td input {
 					return false;
 				}
 		
-				var name = $("#name").val();
+				var name = $("#u_name").val();
 				if (name == "") {
 					alert("이름을 입력해주세요.");
 					$("#name").focus();
 					return false;
 				}
-				var email = $("#email").val();
+				var email = $("#u_email").val();
 				var reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
 				if (email == "" || !reg_email.test(email)) {
 					alert("email을 입력해주세요.");

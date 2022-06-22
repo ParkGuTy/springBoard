@@ -69,5 +69,9 @@ public class BoardService {
 		boardDAO.deleteFile(b_no);
 	}
 
+	public void countUp(BoardDTO dto) {
+		boardDAO.countUp(dto);
+	}
+
 	
 }

@@ -3,11 +3,14 @@ package com.poseidon.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.http.HttpResponse;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +66,6 @@ public class BoardController {
 			dto.setB_title(request.getParameter("title"));
 			dto.setB_no(util.str2int(request.getParameter("b_no")));
 			dto.setU_id((String) session.getAttribute("id"));
-			// System.out.println(dto);
 
 			// 저장하기
 			int result = boardService.repairPost(dto);
@@ -85,7 +87,7 @@ public class BoardController {
 		HttpSession session = request.getSession();
 		if (request.getParameter("b_no") != null && session.getAttribute("id") != null) {
 			// dto에 담아서 mv에 붙이기 = /detail
-			// 변경필 -> 글번호만 맞으면 다른 사람 글도 가져옵니다. 수정해야 합니다.
+			
 			BoardDTO repairPost = new BoardDTO();
 			repairPost.setB_no(util.str2int(request.getParameter("b_no")));
 			repairPost.setU_id((String) session.getAttribute("id"));
@@ -128,9 +130,9 @@ public class BoardController {
 
 				if (file.exists()) { // 파일이 존재하면
 					file.delete(); // 파일 삭제
-					System.out.println("파일이 삭제 되었습니다.");
+					//System.out.println("파일이 삭제 되었습니다.");
 				} else {
-					System.out.println("실패 했습니다.");
+					//System.out.println("실패 했습니다.");
 				}
 				// 테이블에서 삭제
 				boardService.deleteFile(b_no);
@@ -219,16 +221,45 @@ public class BoardController {
 
 	// 상세보기 화면 /detail?b_no=154
 	@GetMapping(value = "/detail")
-	public ModelAndView detail(@RequestParam("b_no") int b_no, HttpServletRequest request) { // HttpServletRequest ,
-																								// BoardDTO dto , 총 세가지
-																								// 방법이 있음
+	public ModelAndView detail(@RequestParam("b_no") int b_no, HttpServletRequest request, HttpServletResponse response) { // HttpServletRequest ,
+		
+		
+		// 방법이 있음
 		ModelAndView mv = null; // jsp
 //		//System.out.println("들어오는 b_no : " + b_no );
 		// DB로 보내서 값이 있는지 확인하기
 		BoardDTO detail = new BoardDTO();
 		detail.setB_no(b_no);
-
+		HttpSession session = request.getSession();
 		BoardDTO dto = boardService.detail(detail);
+		
+		 Cookie oldCookie = null;
+		    Cookie[] cookies = request.getCookies();
+		    if (cookies != null) {
+		        for (Cookie cookie : cookies) {
+		            if (cookie.getName().equals("boardView")) {
+		                oldCookie = cookie;
+		            }
+		        }
+		    }
+
+		    if (oldCookie != null) {
+		        if (!oldCookie.getValue().contains("[" + dto.getB_no() + "-" + session.getAttribute("id") + "]")) {
+		        	boardService.countUp(dto);
+		            oldCookie.setValue(oldCookie.getValue() + "_[" + dto.getB_no() + "-" + session.getAttribute("id") + "]");
+		            oldCookie.setPath("/");
+		            oldCookie.setMaxAge(60 * 60 * 24);
+		            response.addCookie(oldCookie);
+		        }
+		    } else {
+		    	boardService.countUp(dto);
+		        Cookie newCookie = new Cookie("boardView","[" + dto.getB_no() + "-" + session.getAttribute("id") + "]");
+		        newCookie.setPath("/");
+		        newCookie.setMaxAge( 60 * 60 * 24 );
+		        response.addCookie(newCookie);
+		    }
+		    
+		
 //		//System.out.println(dto);
 
 		// 댓글출력 2022-06-014
@@ -247,7 +278,7 @@ public class BoardController {
 				// 파일이 있다면 해당 파일 이름도 보내주기
 				List<FileDTO> fileList = boardService.fileList(b_no);
 				mv.addObject("fileList", fileList);
-
+				
 			}
 
 			return mv;
@@ -288,9 +319,9 @@ public class BoardController {
 		HttpSession session = request.getSession();
 
 		// 파일 업로드 적용한 후 오는 값 확인하기
-		System.out.println(request.getParameter("title"));
-		System.out.println(request.getParameter("content"));
-		System.out.println(request.getParameter("id"));
+		//System.out.println(request.getParameter("title"));
+		//System.out.println(request.getParameter("content"));
+		//System.out.println(request.getParameter("id"));
 
 //			//System.out.println(title);
 //			//System.out.println(content);
@@ -309,9 +340,9 @@ public class BoardController {
 		}
 		// 데이터 베이스로 보내기
 		int result = boardService.write(write);
-		System.out.println("처리결과? " + result);
-		System.out.println("지금 저장된 글의 b_no를 가져올 수 있는 방법은?");
-		System.out.println("방금 저장된 pk : " + write.getB_no());
+		//System.out.println("처리결과? " + result);
+		//System.out.println("지금 저장된 글의 b_no를 가져올 수 있는 방법은?");
+		//System.out.println("방금 저장된 pk : " + write.getB_no());
 
 		// 파일 업로드는 위 작업 끝나고...
 		// 파일이 있다면 수행
@@ -320,17 +351,17 @@ public class BoardController {
 		for (MultipartFile file : files) {
 			if (!(file.getOriginalFilename().isEmpty())) {
 				// 사용자가 파일을 선택했다면 -> 파일저장하기
-				System.out.println("업로드한 파일 이름 : " + file.getOriginalFilename());
-				System.out.println(" 사이즈 : " + file.getSize());
-				System.out.println(" 유무 : " + file.isEmpty());
+				//System.out.println("업로드한 파일 이름 : " + file.getOriginalFilename());
+				//System.out.println(" 사이즈 : " + file.getSize());
+				//System.out.println(" 유무 : " + file.isEmpty());
 
 				// 파일을 저장할 실제 경로 얻어오기 톰켓가상경로
 				String realPath = servletContext.getRealPath("/resources/upload/");
-				System.out.println("파일이 저장되는 경로 : " + realPath);
+				//System.out.println("파일이 저장되는 경로 : " + realPath);
 
 				// 호출
 				String realFileName = filesave.save(realPath, file);
-				System.out.println("저장한 파일 이름 : " + realFileName);
+				//System.out.println("저장한 파일 이름 : " + realFileName);
 				// 파일이름을 데이터 베이스에 저장하는 작업
 				// b_no, realFilename 을 저장합니다. ->fileDTO
 				FileDTO fileDTO = new FileDTO();
@@ -339,7 +370,7 @@ public class BoardController {
 
 				boardService.fileWrite(fileDTO);
 
-				System.out.println("업로드 끝. 경로로 들어가서 확인하세요");
+				//System.out.println("업로드 끝. 경로로 들어가서 확인하세요");
 			}
 		}
 
